@@ -63,7 +63,11 @@ int main() {
     
     cout << "Value of n after allocating from heap is " << *n << endl; // should print garbage
     cout << "If we print n directly, it will print " << n << endl; // should print memory address
+    
+    
     *n = 30;
+    
+    
     cout << "Value of n after initializing is " << *n << endl; // should print 30
 
     calc_with_pointer(n);
