@@ -4,16 +4,6 @@
 //
 //  Created by Made Indrayana on 10.10.20.
 //
-//  This program is created to display the difference between pass-by-value
-//  and pass by reference in C++.
-//
-
-//
-//  main.cpp
-//  Reference and Co.
-//
-//  Created by Made Indrayana on 10.10.20.
-//
 //  This program is created to display the usage of pass-by-value,
 //  pass by reference and pointer in C++.
 //
