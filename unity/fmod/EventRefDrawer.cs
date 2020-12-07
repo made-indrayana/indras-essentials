@@ -1,4 +1,8 @@
-﻿using System;
+//Modified by Made Indrayana from Double Shot Audio
+//FMOD Studio Unity Integration 2.00.09
+//Replace the original file here -> "Assets/Plugins/FMOD/src/Editor"
+
+using System;
 using System.Text;
 using UnityEngine;
 using UnityEditor;
