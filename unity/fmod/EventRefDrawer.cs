@@ -57,7 +57,7 @@ namespace FMODUnity
             Rect openRect = new Rect(addRect.x - openIcon.width - 7, position.y, openIcon.width + 6, baseHeight);
             Rect searchRect = new Rect(openRect.x - browseIcon.width - 9, position.y, browseIcon.width + 8, baseHeight);
             Rect pathRect = new Rect(position.x, position.y, searchRect.x - position.x - 3, baseHeight);
-            Rect swapRect = new Rect(position.x + 155, addRect.y + 20, addIcon.width * 14, baseHeight - 2);
+            Rect swapRect = new Rect(position.x + 155, addRect.y + baseHeight, addIcon.width * 14, baseHeight);
 
             EditorGUI.PropertyField(pathRect, pathProperty, GUIContent.none);                       
 
@@ -97,7 +97,7 @@ namespace FMODUnity
             
             if (!string.IsNullOrEmpty(pathProperty.stringValue) && EventManager.EventFromPath(pathProperty.stringValue) != null)
             {
-                if (GUI.Button(swapRect, new GUIContent("Swap Path to GUID/Event Reference"), buttonStyle) &&
+                if (GUI.Button(swapRect, new GUIContent("Swap Event type to GUID/Path"), buttonStyle) &&
                 !string.IsNullOrEmpty(pathProperty.stringValue) &&
                 ((EventManager.EventFromPath(pathProperty.stringValue) != null) || (EventManager.EventFromGUID(pathGUID) != null)))
                 {
