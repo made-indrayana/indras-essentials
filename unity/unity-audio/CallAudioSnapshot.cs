@@ -15,32 +15,20 @@
         ◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁
 */
 
-// Google Resonance Audio Location Bug Fix
-// by Made Indrayana - Double Shot Audio
-// Location fix by forcing an AudioSource to continually stop and play to force localization update on Google Resonance
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
-public class ResonanceLocationBugFix : MonoBehaviour {
+public class CallAudioSnapshot : MonoBehaviour {
 
-    [SerializeField]
-    private AudioSource audioSource;
+    public AudioMixerSnapshot sceneSnapshot;
+    public float transitionLength = 1f;
 
-	void Start () {
-
-        InvokeRepeating("EmptyLoop", 0.1f, 0.1f);
-	}
-	
-	void EmptyLoop()
+    private void OnEnable()
     {
-        audioSource.Stop();
-        audioSource.Play();
-
-        //Other way to trigger is:
-        //audioSource.enabled = false;
-        //audioSource.enabled = true;
+        //Debug.Log("Audio Snapshot " + sceneSnapshot + " is loaded.");
+        if (sceneSnapshot != null)
+            sceneSnapshot.TransitionTo(transitionLength);
     }
-
 }

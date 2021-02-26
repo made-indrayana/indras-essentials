@@ -15,32 +15,23 @@
         ◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁
 */
 
-// Google Resonance Audio Location Bug Fix
-// by Made Indrayana - Double Shot Audio
-// Location fix by forcing an AudioSource to continually stop and play to force localization update on Google Resonance
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
-public class ResonanceLocationBugFix : MonoBehaviour {
 
-    [SerializeField]
-    private AudioSource audioSource;
-
-	void Start () {
-
-        InvokeRepeating("EmptyLoop", 0.1f, 0.1f);
-	}
-	
-	void EmptyLoop()
+[CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
+public class ReadOnlyAttributeDrawer : PropertyDrawer
+{
+    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        audioSource.Stop();
-        audioSource.Play();
-
-        //Other way to trigger is:
-        //audioSource.enabled = false;
-        //audioSource.enabled = true;
+        return EditorGUI.GetPropertyHeight(property, label, true);
     }
 
+    // Draw a disabled property field
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
+        GUI.enabled = false;
+        EditorGUI.PropertyField(position, property, label, true);
+        GUI.enabled = true;
+    }
 }

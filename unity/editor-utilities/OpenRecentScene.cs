@@ -16,91 +16,43 @@
 */
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
 
-public class VRFader : MonoBehaviour
+[InitializeOnLoad]
+public static class OpenRecent
 {
-    public enum Fade { In, Out }
-    
-    [SerializeField] private GameObject canvas;
-    [SerializeField] private Image fadeImage;
-    public float fadeTime = 2f;
-    public float pauseBetweenFade = 1f;
-    private bool isFading = false;
-    public bool IsFading { get { return isFading; } }
-    public bool startWithFadeIn = false;
-
-    private void Awake()
+    [global::UnityEditor.MenuItem(
+        "File/Open Previous Scene &2",
+        false,
+        154)]
+    static void OpenPreviousScene()
     {
-        canvas.SetActive(false);
+        EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+
+        if (!EditorPrefs.HasKey("LastScene"))
+            return;
+        EditorSceneManager.OpenScene(EditorPrefs.GetString("LastScene"));
     }
 
-    private void Start()
+    static OpenRecent()
     {
-        if (startWithFadeIn)
-        {
-            ScreenFadeIn();
-        }
+        EditorSceneManager.sceneOpened += LogSceneOpen;
     }
 
-    private IEnumerator StartFade(Fade direction)
+    static void LogSceneOpen(Scene scene, OpenSceneMode _mode)
     {
-        float elapsedTime = 0f;
-        var tempColor = fadeImage.color;
-        float startAlpha = 0f, targetAlpha = 0f;
-
-        switch (direction)
+        if (EditorPrefs.HasKey("CurrentScene"))
         {
-            case Fade.In:
-                startAlpha = 1f;
-                targetAlpha = 0f;
-                break;
-            case Fade.Out:
-                startAlpha = 0f;
-                targetAlpha = 1f;
-                break;
+            //do nothing if opening the same scene again.
+            if (EditorPrefs.GetString("CurrentScene") == scene.path)
+                return;
+            EditorPrefs.SetString("LastScene", EditorPrefs.GetString("CurrentScene"));
         }
 
-        isFading = true;
-        canvas.SetActive(true);
-
-        while (elapsedTime < fadeTime)
-        {
-            elapsedTime += Time.deltaTime;
-            tempColor.a = Mathf.Lerp(startAlpha, targetAlpha, Mathf.Clamp01(elapsedTime / fadeTime));
-            fadeImage.color = tempColor;
-            yield return new WaitForEndOfFrame();
-        }
-
-        yield return new WaitForSeconds(pauseBetweenFade);
-
-        isFading = false;
-        canvas.SetActive(false);
-
+        EditorPrefs.SetString("CurrentScene", scene.path);
     }
-
-    private IEnumerator WaitAndStartFade(Fade direction)
-    {
-        while (isFading) { yield return new WaitForEndOfFrame(); }
-        StartCoroutine(StartFade(direction));
-    }
-
-    public void ScreenFadeOut()
-    {
-        if (isFading)
-        {
-            StartCoroutine(WaitAndStartFade(Fade.Out));
-        }
-        else { StartCoroutine(StartFade(Fade.Out)); }
-    }
-    public void ScreenFadeIn()
-    {
-        if (isFading)
-        {
-            StartCoroutine(WaitAndStartFade(Fade.In));
-        }
-        else { StartCoroutine(StartFade(Fade.In)); }
-    }
-
 }
