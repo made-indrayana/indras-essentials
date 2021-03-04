@@ -1,11 +1,13 @@
 # FMOD
 /Assets/FMODStudioCache.asset
 /Assets/FMODStudioCache.asset.meta
+/Assets/Plugins/FMOD/Cache/
+/Assets/Plugins/FMOD/Cache.meta
 fmod.log
 fmod_editor.log
 
 # FMOD studio (In folder FMOD)
-/FMOD/**.user
-/FMOD/**.unsaved
-/FMOD/**.cache
-/FMOD/**.restore
+/FMODProjectPath/**.user
+/FMODProjectPath/**.unsaved
+/FMODProjectPath/**.cache
+/FMODProjectPath/**.restore
