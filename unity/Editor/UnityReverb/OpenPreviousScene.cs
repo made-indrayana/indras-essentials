@@ -15,6 +15,10 @@
         ◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁
 */
 
+// Open Previous Scene
+// by Made Indrayana - Double Shot Audio
+// Shortcut for opening previous scene if you juggle around two scenes a lot.
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,15 +27,15 @@ using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
 
 [InitializeOnLoad]
-public static class OpenRecent
+public static class OpenPreviousScene
 {
     [global::UnityEditor.MenuItem(
         "File/Open Previous Scene &2",
         false,
         154)]
-    static void OpenPreviousScene()
+    static void PreviousScene()
     {
-        EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+        EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo(); // Safeguarding against switching scene without saving
 
         if (!EditorPrefs.HasKey("LastScene"))
             return;

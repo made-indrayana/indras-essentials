@@ -18,6 +18,7 @@
 // FMOD RuntimeManager.cs extension
 // by Made Indrayana - Double Shot Audio
 // Extended the class so you can pass (multiple) parameters with PlayOneShot and PlayOneShotAttached
+// Put this file here -> "Assets/Plugins/FMOD/src/Runtime"
 
 using System;
 using UnityEngine;

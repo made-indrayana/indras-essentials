@@ -14,32 +14,33 @@
         ▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷
         ◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁
 */
-// Google Resonance Audio Location Bug Fix
-// by Made Indrayana - Double Shot Audio
-// Location fix by forcing an AudioSource to continually stop and play to force localization update on Google Resonance
 
-using System.Collections;
-using System.Collections.Generic;
+// WIP
+
 using UnityEngine;
+using UnityEngine.Audio;
 
-public class ResonanceLocationBugFix : MonoBehaviour {
-
-    [SerializeField]
-    private AudioSource audioSource;
-
-	void Start () {
-
-        InvokeRepeating("EmptyLoop", 0.1f, 0.1f);
-	}
-	
-	void EmptyLoop()
+namespace DoubleShot
+{
+    [CreateAssetMenu(fileName = "NewReverbPreset.asset", menuName = "Double Shot Audio/Reverb Preset")]
+    public class ReverbPreset : ScriptableObject
     {
-        audioSource.Stop();
-        audioSource.Play();
+        [Header("Reverb Preset Name")]
+        public new string name;
 
-        //Other way to trigger is:
-        //audioSource.enabled = false;
-        //audioSource.enabled = true;
+        [Header("Reverb Parameters")]
+        public float room;
+        public float roomHF;
+        public float roomLF;
+        public float decayTime;
+        public float decayHFRatio;
+        public float reflections;
+        public float reflectDelay;
+        public float reverb;
+        public float reverbDelay;
+        public float hFReference;
+        public float lFReference;
+        public float diffusion;
+        public float density;
     }
-
 }

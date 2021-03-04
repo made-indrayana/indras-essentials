@@ -15,13 +15,34 @@
         ◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁
 */
 
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DoubleShot.Utils
+namespace DoubleShot
 {
+    public static class Utils
+    {
+        public enum Direction { In, Out }
+
+
+    }
+    
+    public static class FMODUtils
+    {
+        public static bool IsInstance3D(FMOD.Studio.EventInstance instance)
+        {
+            FMOD.Studio.EventDescription desc;
+            bool is3D;
+            instance.getDescription(out desc);
+            desc.is3D(out is3D);
+            return is3D;
+        }
+    }
+
+    /// <summary>
+    /// To be deprecated and generalized.
+    /// </summary>
     public static class AudioFader
     {
         public static bool isFading
@@ -35,19 +56,19 @@ namespace DoubleShot.Utils
         /// <summary>Coroutine for audio fade in/out. fadeTime is true to real seconds.
         /// You can use as many AudioSources as possible in one execution, useful for e.g. fading in/out a group of ambisonics sources.
         /// </summary>
-        public static IEnumerator Fade(Direction direction, float fadeTime, params AudioSource[] audioSources)
+        public static IEnumerator Fade(Utils.Direction direction, float fadeTime, params AudioSource[] audioSources)
         {
             // IMPORTANT FOR isFading CHECK!! DO NOT REMOVE
             yield return null;
 
-            isFadingIn = (direction == Direction.In) ? true : isFadingIn;
-            isFadingOut = (direction == Direction.Out) ? true : isFadingOut;
+            isFadingIn = (direction == Utils.Direction.In) ? true : isFadingIn;
+            isFadingOut = (direction == Utils.Direction.Out) ? true : isFadingOut;
 
             float startVolume = 0f, endVolume = 1f;
 
             switch (direction)
             {
-                case Direction.In:
+                case Utils.Direction.In:
                     startVolume = (audioSources[0].volume > 0.1f) ? 0f : audioSources[0].volume;
                     endVolume = 1f;
                     foreach (AudioSource a in audioSources)
@@ -57,7 +78,7 @@ namespace DoubleShot.Utils
                     }
                     break;
 
-                case Direction.Out:
+                case Utils.Direction.Out:
                     startVolume = (audioSources[0].volume > 0.9f) ? 1f : audioSources[0].volume;
                     endVolume = 0f;
                     break;
@@ -74,10 +95,10 @@ namespace DoubleShot.Utils
 
             }
 
-            isFadingIn = (direction == Direction.In) ? false : isFadingIn;
-            isFadingOut = (direction == Direction.Out) ? false : isFadingOut;
+            isFadingIn = (direction == Utils.Direction.In) ? false : isFadingIn;
+            isFadingOut = (direction == Utils.Direction.Out) ? false : isFadingOut;
 
-            if (direction == Direction.Out && !isFading)
+            if (direction == Utils.Direction.Out && !isFading)
             {
                 foreach (AudioSource a in audioSources) { a.Stop(); a.clip = null; }
             }

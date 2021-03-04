@@ -1,6 +1,23 @@
-//Modified by Made Indrayana from Double Shot Audio
-//FMOD Studio Unity Integration 2.01.05 & 2.01.07
-//Replace the original file here -> "Assets/Plugins/FMOD/src/Editor"
+/*
+        ▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷
+        ◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁
+                                                                                           
+             ((((                                                                          
+            ((((     _______       _______.     ___                                        
+             ))))   |       \     /       |    /   \                                       
+          _ .---.   |  .--.  |   |   (----`   /  ^  \                                      
+         ( |`---'|  |  |  |  |    \   \      /  /_\  \    _                                
+          \|     |  |  '--'  |.----)   |    /  _____  \  /   _   _|  _        _  ._ |   _  
+          : .___, : |_______/ |_______/    /__/     \__\ \_ (_) (_| (/_ \/\/ (_) |  |< _>  
+           `-----'                                                                         
+                                                                                           
+        ▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷▷
+        ◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁◁
+*/
+
+// Modified by Made Indrayana from Double Shot Audio
+// FMOD Studio Unity Integration 2.01.05 & 2.01.07
+// Replace the original file here -> "Assets/Plugins/FMOD/src/Editor"
 
 using System;
 using System.Linq;
