@@ -76,14 +76,13 @@ namespace FMODUnity
             Rect openRect = new Rect(addRect.x - openIcon.width - 7, position.y, openIcon.width + 6, baseHeight);
             Rect searchRect = new Rect(openRect.x - browseIcon.width - 9, position.y, browseIcon.width + 8, baseHeight);
             Rect pathRect = new Rect(position.x, position.y, searchRect.x - position.x - 3, baseHeight);
-            Rect swapRect = new Rect(position.x + 155, addRect.y + baseHeight, addIcon.width * 14, baseHeight);
 
-            EditorGUI.PropertyField(pathRect, pathProperty, GUIContent.none);
+            EditorGUI.PropertyField(pathRect, pathProperty, GUIContent.none);                       
 
             if (GUI.Button(searchRect, new GUIContent(browseIcon, "Search"), buttonStyle))
             {
                 var eventBrowser = ScriptableObject.CreateInstance<EventBrowser>();
-
+                
                 eventBrowser.ChooseEvent(property);
                 var windowRect = position;
                 windowRect.position = GUIUtility.GUIToScreenPoint(windowRect.position);
@@ -93,7 +92,7 @@ namespace FMODUnity
             }
             if (GUI.Button(addRect, new GUIContent(addIcon, "Create New Event in Studio"), buttonStyle))
             {
-                var addDropdown = EditorWindow.CreateInstance<CreateEventPopup>();
+                var addDropdown= EditorWindow.CreateInstance<CreateEventPopup>();
 
                 addDropdown.SelectEvent(property);
                 var windowRect = position;
@@ -103,7 +102,7 @@ namespace FMODUnity
 
             }
             if (GUI.Button(openRect, new GUIContent(openIcon, "Open In Browser"), buttonStyle) &&
-                !string.IsNullOrEmpty(pathProperty.stringValue) &&
+                !string.IsNullOrEmpty(pathProperty.stringValue) && 
                 EventManager.EventFromPath(pathProperty.stringValue) != null
                 )
             {
@@ -111,10 +110,13 @@ namespace FMODUnity
                 EventBrowser eventBrowser = EditorWindow.GetWindow<EventBrowser>();
                 eventBrowser.FrameEvent(pathProperty.stringValue);
             }
-            /////////// START: This is the new fuction for swapping event path to GUID           
+            
             if (!string.IsNullOrEmpty(pathProperty.stringValue) && EventManager.EventFromPath(pathProperty.stringValue) != null)
             {
-                if (GUI.Button(swapRect, new GUIContent("Swap Event type to GUID/Path"), buttonStyle) &&
+
+                #region Added the swap GUID/Path functionality
+                Rect swapRect = new Rect(searchRect.x, position.y + baseHeight, searchRect.width * 3 + 5, baseHeight);
+                if (GUI.Button(swapRect, new GUIContent("Swap"), buttonStyle) &&
                 !string.IsNullOrEmpty(pathProperty.stringValue) &&
                 ((EventManager.EventFromPath(pathProperty.stringValue) != null) || EventManager.EventFromPath(pathProperty.stringValue) != null))
                 {
@@ -123,74 +125,69 @@ namespace FMODUnity
                     {
                         property.stringValue = eventRef.Path;
                         property.serializedObject.ApplyModifiedProperties();
-                        //property.serializedObject.Update();
                         GUI.changed = true;
                     }
                     else
                     {
                         property.stringValue = eventRef.Guid.ToString("b");
                         property.serializedObject.ApplyModifiedProperties();
-                        //property.serializedObject.Update();
                         GUI.changed = true;
                     }
                 }
-                /////////// END: This is the new fuction for swapping event path to GUID 
+                #endregion
 
-                if (!string.IsNullOrEmpty(pathProperty.stringValue) && EventManager.EventFromPath(pathProperty.stringValue) != null)
+                Rect foldoutRect = new Rect(position.x + 10, position.y + baseHeight, position.width, baseHeight);
+                property.isExpanded = EditorGUI.Foldout(foldoutRect, property.isExpanded, "Event Properties");
+                if (property.isExpanded)
                 {
-                    Rect foldoutRect = new Rect(position.x + 10, position.y + baseHeight, position.width, baseHeight);
-                    property.isExpanded = EditorGUI.Foldout(foldoutRect, property.isExpanded, "Event Properties");
-                    if (property.isExpanded)
+                    var style = new GUIStyle(GUI.skin.label);
+                    style.richText = true;
+                    EditorEventRef eventRef = EventManager.EventFromPath(pathProperty.stringValue);
+                    float width = style.CalcSize(new GUIContent("<b>Oneshot</b>")).x;
+                    Rect labelRect = new Rect(position.x, position.y + baseHeight * 2, width, baseHeight);
+                    Rect valueRect = new Rect(position.x + width + 10, position.y + baseHeight * 2, pathRect.width, baseHeight);
+
+                    if (pathProperty.stringValue.StartsWith("{"))
                     {
-                        var style = new GUIStyle(GUI.skin.label);
-                        style.richText = true;
-                        EditorEventRef eventRef = EventManager.EventFromPath(pathProperty.stringValue);
-                        float width = style.CalcSize(new GUIContent("<b>Oneshot</b>")).x;
-                        Rect labelRect = new Rect(position.x, position.y + baseHeight * 2, width, baseHeight);
-                        Rect valueRect = new Rect(position.x + width + 10, position.y + baseHeight * 2, pathRect.width, baseHeight);
-
-                        if (pathProperty.stringValue.StartsWith("{"))
-                        {
-                            GUI.Label(labelRect, new GUIContent("<b>Path</b>"), style);
-                            EditorGUI.SelectableLabel(valueRect, eventRef.Path);
-                        }
-                        else
-                        {
-                            GUI.Label(labelRect, new GUIContent("<b>GUID</b>"), style);
-                            EditorGUI.SelectableLabel(valueRect, eventRef.Guid.ToString("b"));
-                        }
-                        labelRect.y += baseHeight;
-                        valueRect.y += baseHeight;
-
-                        GUI.Label(labelRect, new GUIContent("<b>Banks</b>"), style);
-                        GUI.Label(valueRect, string.Join(", ", eventRef.Banks.Select(x => x.Name).ToArray()));
-                        labelRect.y += baseHeight;
-                        valueRect.y += baseHeight;
-
-                        GUI.Label(labelRect, new GUIContent("<b>Panning</b>"), style);
-                        GUI.Label(valueRect, eventRef.Is3D ? "3D" : "2D");
-                        labelRect.y += baseHeight;
-                        valueRect.y += baseHeight;
-
-                        GUI.Label(labelRect, new GUIContent("<b>Stream</b>"), style);
-                        GUI.Label(valueRect, eventRef.IsStream.ToString());
-                        labelRect.y += baseHeight;
-                        valueRect.y += baseHeight;
-
-                        GUI.Label(labelRect, new GUIContent("<b>Oneshot</b>"), style);
-                        GUI.Label(valueRect, eventRef.IsOneShot.ToString());
-                        labelRect.y += baseHeight;
-                        valueRect.y += baseHeight;
+                        GUI.Label(labelRect, new GUIContent("<b>Path</b>"), style);
+                        EditorGUI.SelectableLabel(valueRect, eventRef.Path);
                     }
-                }
-                else
-                {
-                    Rect labelRect = new Rect(position.x, position.y + baseHeight, position.width, baseHeight);
-                    GUI.Label(labelRect, new GUIContent("Event Not Found", EditorGUIUtility.Load("FMOD/NotFound.png") as Texture2D));
-                }
+                    else
+                    {
+                        GUI.Label(labelRect, new GUIContent("<b>GUID</b>"), style);
+                        EditorGUI.SelectableLabel(valueRect, eventRef.Guid.ToString("b"));
+                    }
+                    labelRect.y += baseHeight;
+                    valueRect.y += baseHeight;
 
-                EditorGUI.EndProperty();
+                    GUI.Label(labelRect, new GUIContent("<b>Banks</b>"), style);
+                    GUI.Label(valueRect, string.Join(", ", eventRef.Banks.Select(x => x.Name).ToArray()));
+                    labelRect.y += baseHeight;
+                    valueRect.y += baseHeight;
+
+                    GUI.Label(labelRect, new GUIContent("<b>Panning</b>"), style);
+                    GUI.Label(valueRect, eventRef.Is3D ? "3D" : "2D");
+                    labelRect.y += baseHeight;
+                    valueRect.y += baseHeight;
+
+                    GUI.Label(labelRect, new GUIContent("<b>Stream</b>"), style);
+                    GUI.Label(valueRect, eventRef.IsStream.ToString());
+                    labelRect.y += baseHeight;
+                    valueRect.y += baseHeight;
+
+                    GUI.Label(labelRect, new GUIContent("<b>Oneshot</b>"), style);
+                    GUI.Label(valueRect, eventRef.IsOneShot.ToString());
+                    labelRect.y += baseHeight;
+                    valueRect.y += baseHeight;
+                }
             }
+            else
+            {
+                Rect labelRect = new Rect(position.x, position.y + baseHeight, position.width, baseHeight);
+                GUI.Label(labelRect, new GUIContent("Event Not Found", EditorGUIUtility.Load("FMOD/NotFound.png") as Texture2D));
+            }
+
+            EditorGUI.EndProperty();
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
