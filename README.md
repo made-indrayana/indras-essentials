@@ -1,2 +1,2 @@
-# dsa-essentials
-Collections of Double Shot Audio's essentials for programming
+# indras-essentials
+Collections of Indra's essentials for programming
